@@ -11,7 +11,7 @@ Laravel の演習課題です。
 
 ## 課題
 ### 1. 環境構築
-Laravel Sail を使用して環境構築を行ってください。
+Laravel Sail を使用して [環境構築](https://readouble.com/laravel/9.x/ja/installation.html) を行ってください。
 
 ### 2. 日報作成API
 #### 2.1 エンドポイントの作成

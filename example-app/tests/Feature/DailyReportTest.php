@@ -23,7 +23,7 @@ class DailyReportTest extends TestCase
      */
     public function test_store_response_code(): void
     {
-        $this->post(route('daily_reports.store'))
+        $this->postJson(route('daily_reports.store'))
             ->assertCreated();
     }
 
@@ -34,8 +34,10 @@ class DailyReportTest extends TestCase
      */
     public function test_store_save(): void
     {
-        $this->post(route('daily_reports.store'));
-        $this->assertDatabaseCount(DailyReport::class, 1);
+        $requestContents = ['content' => '今日はこれをやりました。'];
+
+        $this->postJson(route('daily_reports.store'), $requestContents);
+        $this->assertDatabaseHas(DailyReport::class, $requestContents);
     }
 
     /**
@@ -45,7 +47,7 @@ class DailyReportTest extends TestCase
      */
     public function test_store_return_content(): void
     {
-        $response = $this->post(route('daily_reports.store'));
+        $response = $this->postJson(route('daily_reports.store'), ['content' => '今日はこれをやりました。']);
 
         $response->assertJsonStructure([
             'id',
@@ -55,7 +57,7 @@ class DailyReportTest extends TestCase
         ]);
 
         $response->assertJson([
-            'content' => ''
+            'content' => '今日はこれをやりました。'
         ]);
     }
 }

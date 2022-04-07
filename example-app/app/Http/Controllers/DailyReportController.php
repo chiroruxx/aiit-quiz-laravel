@@ -17,12 +17,13 @@ class DailyReportController extends Controller
     /**
      * 日報を保存します。
      *
+     * @param Request $request
      * @return JsonResponse
      */
-    public function store(): JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $report = new DailyReport();
-        $report->fill(['content' => '']);
+        $report->fill(['content' => $request->json('content', '')]);
         $report->save();
 
         return response()->json($report, ResponseCode::HTTP_CREATED);

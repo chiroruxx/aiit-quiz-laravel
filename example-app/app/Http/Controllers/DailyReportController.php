@@ -8,6 +8,7 @@ use App\Http\Requests\DailyReportRequest;
 use App\Models\DailyReport;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\Response as ResponseCode;
 
 /**
@@ -15,6 +16,17 @@ use Symfony\Component\HttpFoundation\Response as ResponseCode;
  */
 class DailyReportController extends Controller
 {
+    /**
+     * 日報を取得します。
+     *
+     * @param DailyReport $report
+     * @return Response
+     */
+    public function show(DailyReport $report): Response
+    {
+        return response()->noContent();
+    }
+
     /**
      * 日報を保存します。
      *

@@ -20,6 +20,30 @@ class DailyReportTest extends TestCase
     private array $defaultStoreRequestContent = ['content' => '今日はこれをやりました。'];
 
     /**
+     * 日報取得APIにアクセスすると 204 になること
+     *
+     * @return void
+     */
+    public function test_show_response_code(): void
+    {
+        $report = DailyReport::factory()->create();
+
+        $this->get(route('daily_reports.show', $report))
+            ->assertNoContent();
+    }
+
+    /**
+     * 日報取得APIで存在しない日報にアクセスすると 404 になること
+     *
+     * @return void
+     */
+    public function test_show_response_code_not_found(): void
+    {
+        $this->get(route('daily_reports.show', -1))
+            ->assertNotFound();
+    }
+
+    /**
      * 日報保存APIにアクセスすると 201 になること
      *
      * @return void

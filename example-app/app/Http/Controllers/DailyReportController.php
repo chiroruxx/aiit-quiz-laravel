@@ -20,11 +20,11 @@ class DailyReportController extends Controller
      * 日報を取得します。
      *
      * @param DailyReport $report
-     * @return Response
+     * @return JsonResponse
      */
-    public function show(DailyReport $report): Response
+    public function show(DailyReport $report): JsonResponse
     {
-        return response()->noContent();
+        return response()->json($report);
     }
 
     /**

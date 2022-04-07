@@ -18,9 +18,15 @@ class DailyReportTest extends TestCase
     use RefreshDatabase;
 
     private array $defaultStoreRequestContent = ['content' => '今日はこれをやりました。'];
+    private array $structure = [
+        'id',
+        'content',
+        'created_at',
+        'updated_at'
+    ];
 
     /**
-     * 日報取得APIにアクセスすると 204 になること
+     * 日報取得APIにアクセスすると 200 になること
      *
      * @return void
      */
@@ -29,7 +35,7 @@ class DailyReportTest extends TestCase
         $report = DailyReport::factory()->create();
 
         $this->get(route('daily_reports.show', $report))
-            ->assertNoContent();
+            ->assertOk();
     }
 
     /**
@@ -41,6 +47,24 @@ class DailyReportTest extends TestCase
     {
         $this->get(route('daily_reports.show', -1))
             ->assertNotFound();
+    }
+
+    /**
+     * 日報取得APIにアクセスすると日報データが返ってくること
+     *
+     * @return void
+     */
+    public function test_show_return_content(): void
+    {
+        $report = DailyReport::factory()->create();
+
+        $response = $this->get(route('daily_reports.show', $report));
+
+        $response->assertJsonStructure($this->structure);
+        $response->assertJson([
+            'id' => $report->id,
+            'content' => $report->content,
+        ]);
     }
 
     /**
@@ -74,12 +98,7 @@ class DailyReportTest extends TestCase
     {
         $response = $this->postJson(route('daily_reports.store'), $this->defaultStoreRequestContent);
 
-        $response->assertJsonStructure([
-            'id',
-            'content',
-            'created_at',
-            'updated_at'
-        ]);
+        $response->assertJsonStructure($this->structure);
 
         $response->assertJson($this->defaultStoreRequestContent);
     }

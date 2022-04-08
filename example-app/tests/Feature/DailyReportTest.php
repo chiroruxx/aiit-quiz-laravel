@@ -192,4 +192,20 @@ class DailyReportTest extends TestCase
         $this->patchJson(route('daily_reports.update', -1))
             ->assertNotFound();
     }
+
+    /**
+     * 日報更新APIにアクセスすると日報が更新されること
+     *
+     * @return void
+     */
+    public function test_update_save(): void
+    {
+        $report = DailyReport::factory()->create();
+
+        $updateRequestContent = ['content' => '今日はこれをやりませんでした。'];
+
+        $this->patchJson(route('daily_reports.update', $report), $updateRequestContent);
+
+        $this->assertDatabaseHas(DailyReport::class, ['id' => $report->id, ...$updateRequestContent]);
+    }
 }

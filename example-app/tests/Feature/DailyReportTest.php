@@ -222,4 +222,28 @@ class DailyReportTest extends TestCase
         $this->patchJson(route('daily_reports.update', $report), $requestContent)
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
+
+    /**
+     * 日報削除APIにアクセスすると 204 になること
+     *
+     * @return void
+     */
+    public function test_destroy_response_code(): void
+    {
+        $report = DailyReport::factory()->create();
+
+        $this->delete(route('daily_reports.destroy', $report))
+            ->assertNoContent();
+    }
+
+    /**
+     * 日報削除APIで存在しない日報にアクセスすると 404 になること
+     *
+     * @return void
+     */
+    public function test_destroy_response_code_not_found(): void
+    {
+        $this->delete(route('daily_reports.destroy', -1))
+            ->assertNotFound();
+    }
 }

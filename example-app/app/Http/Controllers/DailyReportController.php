@@ -66,4 +66,15 @@ class DailyReportController extends Controller
 
         return response()->noContent();
     }
+
+    /**
+     * 日報を削除します。
+     *
+     * @param DailyReport $report
+     * @return Response
+     */
+    public function destroy(DailyReport $report): Response
+    {
+        return response()->noContent();
+    }
 }

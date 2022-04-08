@@ -75,6 +75,8 @@ class DailyReportController extends Controller
      */
     public function destroy(DailyReport $report): Response
     {
+        $report->delete();
+
         return response()->noContent();
     }
 }

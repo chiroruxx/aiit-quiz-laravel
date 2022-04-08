@@ -246,4 +246,18 @@ class DailyReportTest extends TestCase
         $this->delete(route('daily_reports.destroy', -1))
             ->assertNotFound();
     }
+
+    /**
+     * 日報削除APIにアクセスすると該当の日報が削除されること
+     *
+     * @return void
+     */
+    public function test_destroy_delete(): void
+    {
+        $report = DailyReport::factory()->create();
+
+        $this->delete(route('daily_reports.destroy', $report));
+
+        $this->assertDatabaseMissing(DailyReport::class, ['id' => $report->id]);
+    }
 }

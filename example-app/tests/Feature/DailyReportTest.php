@@ -26,14 +26,42 @@ class DailyReportTest extends TestCase
     ];
 
     /**
-     * 日報一覧APIにアクセスすると 204 になること
+     * 日報一覧APIにアクセスすると 200 になること
      *
      * @return void
      */
     public function test_index_response_code(): void
     {
         $this->get(route('daily_reports.index'))
-            ->assertNoContent();
+            ->assertOk();
+    }
+
+    /**
+     * 日報一覧APIにアクセスすると日報データのリストが返ってくること
+     *
+     * @return void
+     */
+    public function test_index_return_contents(): void
+    {
+        $reports = DailyReport::factory()->count(2)->create();
+
+        $response = $this->get(route('daily_reports.index'));
+
+        $response->assertJsonStructure([
+            $this->structure,
+            $this->structure
+        ]);
+
+        $response->assertJson([
+            [
+                'id' => $reports->first()->id,
+                'content' => $reports->first()->content,
+            ],
+            [
+                'id' => $reports->last()->id,
+                'content' => $reports->last()->content,
+            ]
+        ]);
     }
 
     /**

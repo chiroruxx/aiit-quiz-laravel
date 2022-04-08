@@ -19,11 +19,11 @@ class DailyReportController extends Controller
     /**
      * 日報の一覧を取得します。
      *
-     * @return Response
+     * @return JsonResponse
      */
-    public function index(): Response
+    public function index(): JsonResponse
     {
-        return response()->noContent();
+        return response()->json(DailyReport::all());
     }
 
     /**

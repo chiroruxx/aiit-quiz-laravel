@@ -26,6 +26,17 @@ class DailyReportTest extends TestCase
     ];
 
     /**
+     * 日報一覧APIにアクセスすると 204 になること
+     *
+     * @return void
+     */
+    public function test_index_response_code(): void
+    {
+        $this->get(route('daily_reports.index'))
+            ->assertNoContent();
+    }
+
+    /**
      * 日報取得APIにアクセスすると 200 になること
      *
      * @return void

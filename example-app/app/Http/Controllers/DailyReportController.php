@@ -17,6 +17,16 @@ use Symfony\Component\HttpFoundation\Response as ResponseCode;
 class DailyReportController extends Controller
 {
     /**
+     * 日報の一覧を取得します。
+     *
+     * @return Response
+     */
+    public function index(): Response
+    {
+        return response()->noContent();
+    }
+
+    /**
      * 日報を取得します。
      *
      * @param DailyReport $report

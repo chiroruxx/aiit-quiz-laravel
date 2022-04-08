@@ -51,4 +51,15 @@ class DailyReportController extends Controller
 
         return response()->json($report, ResponseCode::HTTP_CREATED);
     }
+
+    /**
+     * 日報を更新します。
+     *
+     * @param DailyReport $report
+     * @return Response
+     */
+    public function update(DailyReport $report): Response
+    {
+        return response()->noContent();
+    }
 }

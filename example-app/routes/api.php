@@ -24,3 +24,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('daily-reports', [DailyReportController::class, 'index'])->name('daily_reports.index');
 Route::get('daily-reports/{report}', [DailyReportController::class, 'show'])->name('daily_reports.show');
 Route::post('daily-reports', [DailyReportController::class, 'store'])->name('daily_reports.store');
+Route::patch('daily-reports/{report}', [DailyReportController::class, 'update'])->name('daily_reports.update');

@@ -168,4 +168,28 @@ class DailyReportTest extends TestCase
             'content が191文字以上' => ['requestContent' => ['content' => str_repeat('a', 192)]],
         ];
     }
+
+    /**
+     * 日報更新APIにアクセスすると 204 になること
+     *
+     * @return void
+     */
+    public function test_update_response_code(): void
+    {
+        $report = DailyReport::factory()->create();
+
+        $this->patchJson(route('daily_reports.update', $report))
+            ->assertNoContent();
+    }
+
+    /**
+     * 日報更新APIで存在しない日報にアクセスすると 404 になること
+     *
+     * @return void
+     */
+    public function test_update_response_code_not_found(): void
+    {
+        $this->patchJson(route('daily_reports.update', -1))
+            ->assertNotFound();
+    }
 }

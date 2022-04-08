@@ -18,6 +18,7 @@ class DailyReportTest extends TestCase
     use RefreshDatabase;
 
     private array $defaultStoreRequestContent = ['content' => '今日はこれをやりました。'];
+    private array $defaultUpdateRequestContent = ['content' => '今日はこれをやりませんでした。'];
     private array $structure = [
         'id',
         'content',
@@ -147,7 +148,7 @@ class DailyReportTest extends TestCase
      *
      * @param array $requestContent
      * @return void
-     * @dataProvider invalid_store_request_contents_provider
+     * @dataProvider invalid_save_request_contents_provider
      */
     public function test_store_validation(array $requestContent): void
     {
@@ -160,7 +161,7 @@ class DailyReportTest extends TestCase
      *
      * @return array
      */
-    public function invalid_store_request_contents_provider(): array
+    public function invalid_save_request_contents_provider(): array
     {
         return [
             'content なし' => ['requestContent' => []],
@@ -178,7 +179,7 @@ class DailyReportTest extends TestCase
     {
         $report = DailyReport::factory()->create();
 
-        $this->patchJson(route('daily_reports.update', $report))
+        $this->patchJson(route('daily_reports.update', $report), $this->defaultUpdateRequestContent)
             ->assertNoContent();
     }
 
@@ -189,7 +190,7 @@ class DailyReportTest extends TestCase
      */
     public function test_update_response_code_not_found(): void
     {
-        $this->patchJson(route('daily_reports.update', -1))
+        $this->patchJson(route('daily_reports.update', -1), $this->defaultUpdateRequestContent)
             ->assertNotFound();
     }
 
@@ -202,10 +203,23 @@ class DailyReportTest extends TestCase
     {
         $report = DailyReport::factory()->create();
 
-        $updateRequestContent = ['content' => '今日はこれをやりませんでした。'];
+        $this->patchJson(route('daily_reports.update', $report), $this->defaultUpdateRequestContent);
 
-        $this->patchJson(route('daily_reports.update', $report), $updateRequestContent);
+        $this->assertDatabaseHas(DailyReport::class, ['id' => $report->id, ...$this->defaultUpdateRequestContent]);
+    }
 
-        $this->assertDatabaseHas(DailyReport::class, ['id' => $report->id, ...$updateRequestContent]);
+    /**
+     * 日報更新APIに不正なリクエストをすると 422 になること
+     *
+     * @param array $requestContent
+     * @return void
+     * @dataProvider invalid_save_request_contents_provider
+     */
+    public function test_update_validation(array $requestContent): void
+    {
+        $report = DailyReport::factory()->create();
+
+        $this->patchJson(route('daily_reports.update', $report), $requestContent)
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 }

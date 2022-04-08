@@ -55,11 +55,11 @@ class DailyReportController extends Controller
     /**
      * 日報を更新します。
      *
-     * @param Request $request
+     * @param DailyReportRequest $request
      * @param DailyReport $report
      * @return Response
      */
-    public function update(Request $request, DailyReport $report): Response
+    public function update(DailyReportRequest $request, DailyReport $report): Response
     {
         $report->fill(['content' => $request->json('content', $report->content)]);
         $report->save();
